@@ -1,5 +1,6 @@
 import subprocess
 from pathlib import Path
+import urllib.parse
 
 def get_root_path():
     """ 현재 프로젝트 루트 경로 반환 """
@@ -54,3 +55,56 @@ def get_branch_changes():
         
     except subprocess.CalledProcessError as e:
         return f"Git 명령어 실행 오류: {e}"
+
+
+def perform_push(branch_name):
+    """Git 푸시 실행"""
+    try:
+        result = subprocess.run([
+            "git", "push", "origin", branch_name
+        ], capture_output=True, text=True, check=True)
+        
+        return f"푸시 완료: origin/{branch_name}"
+        
+    except subprocess.CalledProcessError as e:
+        return f"Git 푸시 실패: {e.stderr}"
+    
+def git_url_info():
+    """현재 브랜치명 반환"""
+
+    project_root = get_root_path()
+    try:
+        result = subprocess.run(
+            ["git", "config", "--get", "remote.origin.url"],
+            capture_output=True, text=True, check=True, cwd=project_root
+        )
+        remote_url = result.stdout.strip().replace('.git','')
+
+        return remote_url
+    except subprocess.CalledProcessError as e:
+        return f"Git 브랜치 이름 조회 실패: {e.stderr}"
+    
+
+def get_branch_name():
+    """현재 브랜치 이름 가져오기"""
+    try:
+        result = subprocess.run(
+            ["git", "branch", "--show-current"],
+            capture_output=True, text=True, check=True
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        return f"Git 브랜치 이름 조회 실패: {e.stderr}"
+
+
+def github_pr_url(github_url, head_branch, title, body, base_branch="main"):
+    """GitHub PR 생성 URL 만들기"""
+    
+    # URL 인코딩
+    encoded_title = urllib.parse.quote(title)
+    encoded_body = urllib.parse.quote(body)
+
+    base_url = f"{github_url}/compare/{base_branch}...{head_branch}"
+    pr_url = f"{base_url}?quick_pull=1&title={encoded_title}&body={encoded_body}"
+    
+    return pr_url
