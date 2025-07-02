@@ -1,9 +1,14 @@
 [project]
 name = "github-pr-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "Github PR MCP Tool"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "mcp[cli]>=1.10.1",
 ]
+
+py_modules = ["main", "mcp_server"]
+
+[project.scripts]
+github-pr-mcp = "main:main"
