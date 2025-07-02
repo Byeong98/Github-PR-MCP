@@ -1,6 +1,6 @@
-def main():
-    print("Hello from github-pr-mcp!")
+import asyncio
+from mcp_server import mcp
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(mcp.run(transport='stdio'))
