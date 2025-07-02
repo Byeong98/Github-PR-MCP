@@ -34,11 +34,12 @@ async def create_change_git() -> str:
 @mcp.tool()
 async def create_github_pr_url(title: str, body: str) -> str:
     """GitHub 프로젝트의 PR 생성 URL을 가져옵니다."""
-    from utils.git_utils import git_url_info, get_branch_name, github_pr_url
+    from utils.git_utils import git_url_info, get_branch_name, github_pr_url, perform_push
 
-    github_url = git_url_info()
-    head_branch = get_branch_name()
     try:
+        github_url = git_url_info()
+        head_branch = get_branch_name()
+        perform_push(head_branch)
         pr_url = github_pr_url(github_url, head_branch, title, body)
         return json.dumps({"status": "success",
             "pr_url": pr_url})
