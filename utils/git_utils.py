@@ -9,14 +9,14 @@ def get_root_path():
             ["git", "rev-parse", "--show-toplevel"],
             capture_output=True,
             text=True,
-            check=True,
-            # cwd 지정하지 않으면 MCP 서버 실행 위치에서 시작
+            check=True
         )
         git_root = Path(result.stdout.strip())
         print(f"Git 루트 발견: {git_root}")
         return git_root
     except subprocess.CalledProcessError as e:
         print(f"⚠️ Git 저장소가 아님: {e}")
+        return None
 
 
 def get_branch_changes():
@@ -72,11 +72,10 @@ def perform_push(branch_name):
 def git_url_info():
     """현재 저장소 주소 반환"""
 
-    project_root = get_root_path()
     try:
         result = subprocess.run(
             ["git", "config", "--get", "remote.origin.url"],
-            capture_output=True, text=True, check=True, cwd=project_root
+            capture_output=True, text=True, check=True
         )
         remote_url = result.stdout.strip().replace('.git','')
 
@@ -88,11 +87,10 @@ def git_url_info():
 def get_branch_name():
     """현재 브랜치 이름 가져오기"""
     
-    project_root = get_root_path()
     try:
         result = subprocess.run(
             ["git", "branch", "--show-current"],
-            capture_output=True, text=True, check=True, cwd=project_root
+            capture_output=True, text=True, check=True
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:

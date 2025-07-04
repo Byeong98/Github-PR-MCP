@@ -52,7 +52,7 @@ async def create_github_pr_url(title: str, body: str) -> str:
     try:
         github_url = git_url_info()
         head_branch = get_branch_name()
-        perform_push(head_branch) # 현재 브랜치를 원격 저장소에 푸시
+        # perform_push(head_branch) # 현재 브랜치를 원격 저장소에 푸시
         pr_url = github_pr_url(github_url, head_branch, title, body)
         return json.dumps({"status": "success",
             "pr_url": pr_url})
