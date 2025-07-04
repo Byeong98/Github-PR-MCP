@@ -44,6 +44,16 @@ async def create_change_git() -> str:
         return json.dumps({"status": "error",
                            "message": str(e)})
 
+@mcp.tool()
+async def get_branch_name() -> str:
+    """현재 브랜치 이름을 가져옵니다."""
+    try:
+        branch_name = git_util.get_branch_name()
+        return json.dumps({"status": "success",
+                           "branch_name": branch_name})
+    except Exception as e:
+        return json.dumps({"status": "error",
+                           "message": str(e)})
 
 @mcp.tool()
 async def create_github_pr_url(title: str, body: str) -> str:
