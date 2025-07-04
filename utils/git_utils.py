@@ -6,18 +6,17 @@ import os
 
 class GitUtils:
     def __init__(self):
-        self.git_root = os.getcwd()
+        self.git_root = self.get_root_path()
 
     def get_root_path(self):
         """ 현재 프로젝트 루트 경로 반환 """
-
         try:
             result = subprocess.run(
                 ["git", "rev-parse", "--show-toplevel"],
                 capture_output=True,
                 text=True,
                 check=True,
-                cwd=self.git_root
+                cwd=os.getcwd()
             )
             git_root = Path(result.stdout.strip())
             print(f"Git 루트 발견: {git_root}")
@@ -100,7 +99,9 @@ class GitUtils:
         try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],
-                capture_output=True, text=True, check=True,
+                capture_output=True, 
+                text=True, 
+                check=True,
                 cwd=self.git_root
             )
             return result.stdout.strip()
