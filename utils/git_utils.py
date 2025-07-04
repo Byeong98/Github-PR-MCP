@@ -6,7 +6,7 @@ import os
 
 class GitUtils:
     def __init__(self):
-        self.git_root = self.get_root_path()
+        self.git_root = os.getcwd()
 
     def get_root_path(self):
         """ 현재 프로젝트 루트 경로 반환 """
