@@ -1,9 +1,9 @@
 from pathlib import Path
-from utils.git_utils import get_root_path
+from utils.git_utils import GitUtils
 
 def read_pr_template():
-    
-    root_path = get_root_path()
+    git_util = GitUtils()
+    root_path = git_util.get_root_path()
     template_paths =  Path(root_path, ".github/PULL_REQUEST_TEMPLATE.md")
     
     try:
