@@ -4,6 +4,19 @@ import json
 mcp = FastMCP("github-pr-mcp")
 
 @mcp.tool()
+async def test_root_path() -> str:
+    """프로젝트 루트 경로 테스트"""
+    from utils.git_utils import get_root_path
+
+    try:
+        root_path = get_root_path()
+        return json.dumps({"status": "success",
+            "root_path": root_path})
+    except Exception as e:
+        return json.dumps({"status": "error",
+            "message": str(e)})
+
+@mcp.tool()
 async def create_template() -> str:
     """프로젝트의 PR 템플릿을 가져옵니다."""
     from utils.template_utils import read_pr_template
