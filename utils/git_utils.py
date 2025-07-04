@@ -70,7 +70,7 @@ def perform_push(branch_name):
         return f"Git 푸시 실패: {e.stderr}"
     
 def git_url_info():
-    """현재 브랜치명 반환"""
+    """현재 저장소 주소 반환"""
 
     project_root = get_root_path()
     try:
@@ -87,10 +87,12 @@ def git_url_info():
 
 def get_branch_name():
     """현재 브랜치 이름 가져오기"""
+    
+    project_root = get_root_path()
     try:
         result = subprocess.run(
             ["git", "branch", "--show-current"],
-            capture_output=True, text=True, check=True
+            capture_output=True, text=True, check=True, cwd=project_root
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
