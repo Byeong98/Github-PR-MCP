@@ -80,7 +80,6 @@ class GitUtils:
 
     def git_url_info(self):
         """현재 저장소 주소 반환"""
-
         try:
             result = subprocess.run(
                 ["git", "config", "--get", "remote.origin.url"],
@@ -95,7 +94,6 @@ class GitUtils:
 
     def get_branch_name(self):
         """현재 브랜치 이름 가져오기"""
-
         try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],
