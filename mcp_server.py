@@ -1,6 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 from utils.git_utils import GitUtils
-from utils.model_utils import CreatePRURLArgs
+from typing import Annotated
+from pydantic import Field
 import json
 import os
 
@@ -59,13 +60,16 @@ async def get_branch_name() -> str:
                            "message": str(e)})
 
 
-@mcp.tool(description="GitHub PR URL 생성", args_schema=CreatePRURLArgs)
-async def create_github_pr_url(
-    github_url: str,
-    head_branch: str,
-    title: str,
-    body: str,
-    base_branch: str = "main"
+@mcp.tool(description="GitHub PR URL 생성")
+async def create_github_pr_url( 
+    github_url: Annotated[str, Field(
+        description="https://github.com/<owner>/<repo> 형식",
+        pattern=r"^https://github\.com/.+/.+$"
+    )],
+    head_branch: Annotated[str, Field(description="머지 대상 브랜치")],
+    title: Annotated[str, Field(description="PR 제목")],
+    body: Annotated[str, Field(description="PR 본문")],
+    base_branch: Annotated[str, Field(description="기준 브랜치")] = "main",
 ) -> str:
 
     try:
