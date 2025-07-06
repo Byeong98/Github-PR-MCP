@@ -1,7 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 from utils.git_utils import GitUtils
 from typing import Annotated
-from pydantic import Field
+from pydantic import Field, HttpUrl
 import json
 import os
 
@@ -9,20 +9,25 @@ mcp = FastMCP("github-pr-mcp")
 git_util = GitUtils()
 
 
-@mcp.tool()
-async def create_github_pr_url( 
+@mcp.tool(description=(
+    "GitHub Compare URL(→ PR 작성 화면)을 **즉시** 생성합니다. "
+    "값 4개(repo, head, title, body)만 준비되면 반드시 이 툴을 호출하세요."
+))
+async def create_github_pr_url(
     github_url: Annotated[str, Field(
-        description="https://github.com/<owner>/<repo> 형식의 GitHub URL",
+        description="https://github.com/<owner>/<repo> 형식",
         pattern=r"^https://github\.com/.+/.+$"
     )],
-    head_branch: Annotated[str, Field(description="머지 대상 브랜치")],
+    head_branch: Annotated[str, Field(
+        description="PR 원본 브랜치 ",
+        examples=["feature/login-ui"]
+    )],
     title: Annotated[str, Field(description="PR 제목")],
     body: Annotated[str, Field(description="PR 본문")],
-    base_branch: Annotated[str, Field(description="기준 브랜치")] = "main",
-) -> str:
+    base_branch="main",
+) -> HttpUrl:
     """
-    GitHub Compare URL을 생성해 ‘Create Pull Request’ 화면으로 바로 이동시킵니다.
-    반드시 GitHub URL, 머지 대상 브랜치, PR 제목, PR 본문, 기준 브랜치를 받아야 합니다.
+    repo, head, title, body 네 줄만 입력 -> 툴 자동 호출 -> 예) repo=https://github.com/acme/api …
     """
     try:
         pr_url = git_util.github_pr_url(github_url,
@@ -30,8 +35,6 @@ async def create_github_pr_url(
                                         title,
                                         body,
                                         base_branch)
-        return json.dumps({"status": "success",
-                           "pr_url": pr_url})
+        return pr_url
     except Exception as e:
-        return json.dumps({"status": "error",
-                           "message": str(e)})
+        return f"PR URL 생성 중 오류 : {str(e)}"
