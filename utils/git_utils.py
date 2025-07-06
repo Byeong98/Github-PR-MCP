@@ -99,8 +99,8 @@ class GitUtils:
         try:
             result = subprocess.run(
                 ["git", "branch", "--show-current"],
-                capture_output=True, 
-                text=True, 
+                capture_output=True,
+                text=True,
                 check=True,
                 cwd=self.git_root
             )
@@ -108,7 +108,11 @@ class GitUtils:
         except subprocess.CalledProcessError as e:
             return f"Git 브랜치 이름 조회 실패: {e.stderr}"
 
-    def github_pr_url(self, github_url, head_branch, title, body, base_branch="main"):
+    def github_pr_url(self, github_url: str,
+                      head_branch: str, 
+                      title: str, 
+                      body: str, 
+                      base_branch: str = "main") -> str:
         """GitHub PR 생성 URL 만들기"""
 
         # URL 인코딩
