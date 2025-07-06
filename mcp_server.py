@@ -11,7 +11,7 @@ git_util = GitUtils()
 
 @mcp.tool(description=(
     "GitHub Compare URL(→ PR 작성 화면)을 **즉시** 생성합니다. "
-    "값 4개(repo, head, title, body)만 준비되면 반드시 이 툴을 호출하세요."
+    "필요 값이(repo, head, title, body) 준비되면 반드시 이 툴을 호출하세요."
 ))
 async def create_github_pr_url(
     github_url: Annotated[str, Field(
@@ -35,6 +35,6 @@ async def create_github_pr_url(
                                         title,
                                         body,
                                         base_branch)
-        return pr_url
+        return f"[PR 바로가기]({pr_url})"
     except Exception as e:
         return f"PR URL 생성 중 오류 : {str(e)}"
