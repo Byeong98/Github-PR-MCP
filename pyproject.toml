@@ -9,7 +9,6 @@ dependencies = [
 ]
 
 [tool.setuptools]
-py-modules = ["main", "mcp_server", "utils.git_utils", "utils.template_utils"]
-
+py-modules = ["main", "mcp_server", "utils.git_utils", "utils.template_utils", "utils.model_utils"]
 [project.scripts]
 github-pr-mcp = "main:main"
